@@ -1,6 +1,8 @@
-import 'package:dictionary/models/enums/tab_option.dart';
+import 'package:dictionary/constants/routes.dart';
+import 'package:dictionary/data/enums/tab_option.dart';
 import 'package:dictionary/views/widgets/tab_option_widget.dart';
 import 'package:dictionary/views/word_list_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
@@ -19,7 +21,7 @@ class _HomeViewState extends State<HomeView> {
         body: Column(children: [
           Container(
             height: 48,
-            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             color: Colors.white,
             child: Row(children: [
               Expanded(
@@ -57,12 +59,20 @@ class _HomeViewState extends State<HomeView> {
           ),
           Expanded(
               child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: PageView(
-              children: [WordListView()],
+              children: const [WordListView()],
             ),
           ))
         ]),
+        floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              FirebaseAuth.instance.signOut().then((value) {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, Routes.signIn, (route) => false);
+              });
+            },
+            child: Icon(Icons.logout)),
       ),
     );
   }
