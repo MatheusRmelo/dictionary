@@ -1,14 +1,14 @@
 import 'package:dictionary/data/models/firebase_word_model.dart';
 import 'package:dictionary/data/repository/history_repository.dart';
-import 'package:dictionary/data/repository/implementations/firebase_history_repository.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 part 'history_list_state.dart';
 
 class HistoryListBloc extends Cubit<HistoryListState> {
-  final HistoryRepository _repository = FirebaseHistoryRepository();
+  final HistoryRepository _repository = GetIt.I<HistoryRepository>();
   HistoryListBloc() : super(HistoryListState());
 
   Future<void> getWords() async {

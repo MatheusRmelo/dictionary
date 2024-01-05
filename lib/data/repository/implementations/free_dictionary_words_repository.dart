@@ -5,7 +5,7 @@ import 'package:dictionary/data/models/word_model.dart';
 import 'package:dictionary/data/repository/words_repository.dart';
 import 'package:http/http.dart' as http;
 
-class FreeDictionaryRepository implements WordsRepository {
+class FreeDictionaryWordsRepository implements WordsRepository {
   final String _path = "https://api.dictionaryapi.dev/api/v2/entries/en";
   @override
   Future<RepositoryResponseModel<WordModel>> getWord(String word) async {

@@ -1,4 +1,10 @@
 import 'package:dictionary/constants/routes.dart';
+import 'package:dictionary/data/repository/favorites_repository.dart';
+import 'package:dictionary/data/repository/history_repository.dart';
+import 'package:dictionary/data/repository/implementations/firebase_favorites_repository.dart';
+import 'package:dictionary/data/repository/implementations/firebase_history_repository.dart';
+import 'package:dictionary/data/repository/implementations/free_dictionary_words_repository.dart';
+import 'package:dictionary/data/repository/words_repository.dart';
 import 'package:dictionary/firebase_options.dart';
 import 'package:dictionary/views/home_view.dart';
 import 'package:dictionary/views/recovery_password_view.dart';
@@ -8,12 +14,24 @@ import 'package:dictionary/views/word_detail_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+
+void setup() {
+  final getIt = GetIt.instance;
+  getIt.registerLazySingleton<FavoritesRepository>(
+      () => FirebaseFavoritesRepository());
+  getIt.registerLazySingleton<HistoryRepository>(
+      () => FirebaseHistoryRepository());
+  getIt.registerLazySingleton<WordsRepository>(
+      () => FreeDictionaryWordsRepository());
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  setup();
   runApp(const MyApp());
 }
 

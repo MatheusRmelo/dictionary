@@ -6,21 +6,19 @@ import 'package:dictionary/data/models/firebase_word_model.dart';
 import 'package:dictionary/data/models/word_model.dart';
 import 'package:dictionary/data/repository/favorites_repository.dart';
 import 'package:dictionary/data/repository/history_repository.dart';
-import 'package:dictionary/data/repository/implementations/firebase_favorites_repository.dart';
-import 'package:dictionary/data/repository/implementations/firebase_history_repository.dart';
-import 'package:dictionary/data/repository/implementations/free_dictionary_repository.dart';
 import 'package:dictionary/data/repository/words_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 part 'word_detail_state.dart';
 
 class WordDetailBloc extends Cubit<WordDetailState> {
   final AudioPlayer audioPlayer = AudioPlayer();
-  final HistoryRepository _historyRepository = FirebaseHistoryRepository();
+  final HistoryRepository _historyRepository = GetIt.I<HistoryRepository>();
   final FavoritesRepository _favoritesRepository =
-      FirebaseFavoritesRepository();
+      GetIt.I<FavoritesRepository>();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final WordsRepository _repository = FreeDictionaryRepository();
+  final WordsRepository _repository = GetIt.I<WordsRepository>();
   WordDetailBloc() : super(WordDetailState());
 
   Future<void> getWord(String word) async {
