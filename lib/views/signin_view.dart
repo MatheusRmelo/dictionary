@@ -80,7 +80,10 @@ class _SignInViewState extends State<SignInView> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                        context, Routes.recoveryPassword);
+                                  },
                                   child: const Text(
                                     "Esqueci minha senha",
                                     style:

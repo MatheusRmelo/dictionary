@@ -1,5 +1,4 @@
 import 'package:dictionary/blocs/word_list_bloc/word_list_bloc.dart';
-import 'package:dictionary/views/widgets/tab_option_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

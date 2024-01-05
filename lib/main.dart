@@ -1,6 +1,7 @@
 import 'package:dictionary/constants/routes.dart';
 import 'package:dictionary/firebase_options.dart';
 import 'package:dictionary/views/home_view.dart';
+import 'package:dictionary/views/recovery_password_view.dart';
 import 'package:dictionary/views/signin_view.dart';
 import 'package:dictionary/views/signup_view.dart';
 import 'package:dictionary/views/word_detail_view.dart';
@@ -33,7 +34,9 @@ class MyApp extends StatelessWidget {
               word: (settings.arguments as Map)['word'] as String,
               words: (settings.arguments as Map)['words'] as List<String>);
         }
-        if (settings.name == Routes.signUp) {
+        if (settings.name == Routes.recoveryPassword) {
+          page = const RecoveryPasswordView();
+        } else if (settings.name == Routes.signUp) {
           page = const SignUpView();
         } else if (settings.name == Routes.signIn ||
             FirebaseAuth.instance.currentUser == null) {

@@ -70,104 +70,127 @@ class _WordDetailViewState extends State<WordDetailView> {
                   child: CircularProgressIndicator(),
                 );
               }
-              return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: 200,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          color: Colors.red[200]),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
+              return SingleChildScrollView(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 200,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            color: Colors.red[200]),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                state.word!.word,
+                                style: const TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                state.word!.phonetic,
+                                style: const TextStyle(fontSize: 24),
+                              ),
+                            ]),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      if (state.word!.audioUrl.isNotEmpty)
+                        Row(
                           children: [
-                            Text(
-                              state.word!.word,
-                              style: const TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold),
+                            InkWell(
+                              onTap: _bloc.handleClickPlayerSong,
+                              child: const Icon(
+                                Icons.play_arrow,
+                                size: 64,
+                              ),
                             ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              state.word!.phonetic,
-                              style: const TextStyle(fontSize: 24),
-                            ),
-                          ]),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    if (state.word!.audioUrl.isNotEmpty)
+                            Expanded(
+                              child: Slider(
+                                onChanged: (value) {},
+                                value: (state.position != null &&
+                                        state.duration != null &&
+                                        state.position!.inMilliseconds > 0 &&
+                                        state.position!.inMilliseconds <
+                                            state.duration!.inMilliseconds)
+                                    ? state.position!.inMilliseconds /
+                                        state.duration!.inMilliseconds
+                                    : 0.0,
+                              ),
+                            )
+                          ],
+                        )
+                      else
+                        const Text('Áudio não disponível'),
+                      const SizedBox(
+                        height: 32,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Meanings',
+                            style: TextStyle(
+                                fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
+                          state.isFavoriting
+                              ? const SizedBox(
+                                  height: 32,
+                                  width: 32,
+                                  child: CircularProgressIndicator(),
+                                )
+                              : IconButton(
+                                  onPressed: _bloc.toggleFavorite,
+                                  icon: Icon(
+                                    state.favorite
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    color: state.favorite
+                                        ? Colors.red
+                                        : Colors.black,
+                                  ))
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      for (var element in state.word!.meanings) ...{
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            "${element.partOfSpeech} - ${element.definition}",
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        )
+                      },
+                      const SizedBox(
+                        height: 24,
+                      ),
                       Row(
                         children: [
-                          InkWell(
-                            onTap: _bloc.handleClickPlayerSong,
-                            child: const Icon(
-                              Icons.play_arrow,
-                              size: 64,
-                            ),
+                          Expanded(
+                              child: OutlinedButton(
+                            onPressed: _bloc.handleClickBack,
+                            child: const Text('Voltar'),
+                          )),
+                          const SizedBox(
+                            width: 16,
                           ),
                           Expanded(
-                            child: Slider(
-                              onChanged: (value) {},
-                              value: (state.position != null &&
-                                      state.duration != null &&
-                                      state.position!.inMilliseconds > 0 &&
-                                      state.position!.inMilliseconds <
-                                          state.duration!.inMilliseconds)
-                                  ? state.position!.inMilliseconds /
-                                      state.duration!.inMilliseconds
-                                  : 0.0,
-                            ),
-                          )
+                              child: ElevatedButton(
+                            onPressed: _bloc.handleClickNext,
+                            child: const Text('Próximo'),
+                          ))
                         ],
                       )
-                    else
-                      const Text('Áudio não disponível'),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    const Text(
-                      'Meanings',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    for (var element in state.word!.meanings) ...{
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        child: Text(
-                          "${element.partOfSpeech} - ${element.definition}",
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      )
-                    },
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: OutlinedButton(
-                          onPressed: _bloc.handleClickBack,
-                          child: const Text('Voltar'),
-                        )),
-                        const SizedBox(
-                          width: 16,
-                        ),
-                        Expanded(
-                            child: ElevatedButton(
-                          onPressed: _bloc.handleClickNext,
-                          child: const Text('Próximo'),
-                        ))
-                      ],
-                    )
-                  ]);
+                    ]),
+              );
             }),
       ),
     );

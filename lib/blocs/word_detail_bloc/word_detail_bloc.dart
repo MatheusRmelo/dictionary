@@ -1,19 +1,32 @@
 import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dictionary/data/models/firebase_word_model.dart';
 import 'package:dictionary/data/models/word_model.dart';
+import 'package:dictionary/data/repository/favorites_repository.dart';
+import 'package:dictionary/data/repository/history_repository.dart';
+import 'package:dictionary/data/repository/implementations/firebase_favorites_repository.dart';
+import 'package:dictionary/data/repository/implementations/firebase_history_repository.dart';
 import 'package:dictionary/data/repository/implementations/free_dictionary_repository.dart';
 import 'package:dictionary/data/repository/words_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 part 'word_detail_state.dart';
 
 class WordDetailBloc extends Cubit<WordDetailState> {
   final AudioPlayer audioPlayer = AudioPlayer();
+  final HistoryRepository _historyRepository = FirebaseHistoryRepository();
+  final FavoritesRepository _favoritesRepository =
+      FirebaseFavoritesRepository();
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final WordsRepository _repository = FreeDictionaryRepository();
   WordDetailBloc() : super(WordDetailState());
 
   Future<void> getWord(String word) async {
     emit(state.copyWith(isLoading: true));
+    _saveWord(word);
+    await getIsFavorite(word);
     var response = await _repository.getWord(word);
     if (response.result != null && response.result!.audioUrl.isNotEmpty) {
       await audioPlayer.setSourceUrl(response.result!.audioUrl);
@@ -30,7 +43,23 @@ class WordDetailBloc extends Cubit<WordDetailState> {
         error: response.error, word: response.result, isLoading: false));
   }
 
-  Future<void> handleClickPlayerSong() async {
+  Future<void> getIsFavorite(String word) async {
+    var response = await _favoritesRepository.isFavorite(word);
+    emit(state.copyWith(error: response.error, favorite: response.result));
+  }
+
+  Future<void> toggleFavorite() async {
+    if (state.word == null) return;
+    emit(state.copyWith(isFavoriting: true));
+    var response = await _favoritesRepository.toggleFavorite(FirebaseWordModel(
+        word: state.word!.word,
+        userId: _firebaseAuth.currentUser!.uid,
+        createdAt: Timestamp.fromDate(DateTime.now())));
+    emit(state.copyWith(
+        isFavoriting: false, favorite: response.result, error: response.error));
+  }
+
+  void handleClickPlayerSong() {
     audioPlayer.play(UrlSource(state.word!.audioUrl));
   }
 
@@ -70,5 +99,13 @@ class WordDetailBloc extends Cubit<WordDetailState> {
     if (index > -1) {
       if (index + 1 < state.words.length) getWord(state.words[index + 1]);
     }
+  }
+
+  void _saveWord(String word) {
+    if (_firebaseAuth.currentUser == null) return;
+    _historyRepository.createWord(FirebaseWordModel(
+        word: word,
+        userId: _firebaseAuth.currentUser!.uid,
+        createdAt: Timestamp.fromDate(DateTime.now())));
   }
 }

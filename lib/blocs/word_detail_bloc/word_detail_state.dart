@@ -4,6 +4,8 @@ class WordDetailState {
   WordModel? word;
   List<String> words;
   bool isLoading;
+  bool isFavoriting;
+  bool favorite;
   String? error;
   Duration? duration;
   Duration? position;
@@ -16,6 +18,8 @@ class WordDetailState {
       {this.word,
       this.words = const [],
       this.isLoading = false,
+      this.isFavoriting = false,
+      this.favorite = false,
       this.error,
       this.duration,
       this.position,
@@ -28,6 +32,8 @@ class WordDetailState {
           {WordModel? word,
           List<String>? words,
           bool? isLoading,
+          bool? isFavoriting,
+          bool? favorite,
           String? error,
           Duration? duration,
           PlayerState? playerState,
@@ -36,6 +42,8 @@ class WordDetailState {
           words: words ?? this.words,
           word: word ?? this.word,
           isLoading: isLoading ?? this.isLoading,
+          isFavoriting: isFavoriting ?? this.isFavoriting,
+          favorite: favorite ?? this.favorite,
           duration: duration ?? this.duration,
           position: position ?? this.position,
           playerState: playerState ?? this.playerState,
