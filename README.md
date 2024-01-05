@@ -18,3 +18,5 @@ Execute <br>
 
 >  This is a challenge by [Coodesh](https://coodesh.com/)
 
+## Link video explicativo
+https://www.loom.com/embed/fd7865fb373b4493b830688759a2c508
