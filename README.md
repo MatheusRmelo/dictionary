@@ -1,16 +1,20 @@
-# dictionary
+# Dictionary
+Projeto para visualizar palavras aleatórias em inglês, vê a fonética, significados e pronúncia.
 
-A new Flutter project.
+## Tecnologias
+Flutter (Framework)
+Dart (Linguagem)
+Firebase Authentication (Login)
+Firebase Firestore (Database)
 
-## Getting Started
+## Instalação
+Após instalar o flutter e fazer o clone do projeto <br>
+```flutter pub get``` <br>
+```flutter run```
 
-This project is a starting point for a Flutter application.
+## Tests
+Execute <br>
+```flutter test integration_test```
 
-A few resources to get you started if this is your first Flutter project:
+>  This is a challenge by [Coodesh](https://coodesh.com/)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
